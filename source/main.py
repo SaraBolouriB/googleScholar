@@ -14,13 +14,14 @@ def search_in_excel(keyword):
     return found_article
 
 def search_in_google_scholar(search_keyword):
-    driver = webdriver.Chrome(executable_path="./chrome/chromedriver.exe")
+    driver = webdriver.Chrome(executable_path="./chrome/chromedriver")
     driver.get('https://scholar.google.com')
     inputElems = driver.find_elements_by_css_selector('input[name=q]')
     for inputElem in inputElems:
         inputElem.send_keys(search_keyword)
         inputElem.send_keys(Keys.ENTER)
-
+    items = driver.find_elements_by_class_name('gs_r gs_or gs_scl')
+    print(items)
     time.sleep(5)
     driver.close()
 
