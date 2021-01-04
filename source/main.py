@@ -20,8 +20,11 @@ def search_in_google_scholar(search_keyword):
     for inputElem in inputElems:
         inputElem.send_keys(search_keyword)
         inputElem.send_keys(Keys.ENTER)
-    items = driver.find_elements_by_class_name('gs_r gs_or gs_scl')
-    print(items)
+    items = driver.find_elements_by_class_name('gs_rt')
+    hrefs = []
+    for item in items:
+        hrefs.append(item.find_element_by_tag_name('a').get_attribute('href'))
+    print(hrefs)
     time.sleep(5)
     driver.close()
 
