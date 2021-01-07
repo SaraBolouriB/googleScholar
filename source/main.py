@@ -1,10 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
 import time
 import pandas as pd
-
-scholar = []
 
 def get_search_keyword():
     key = input('Enter Your Keyword: ')
@@ -24,22 +21,7 @@ def search_in_google_scholar(search_keyword):
         inputElem.send_keys(search_keyword)
         inputElem.send_keys(Keys.ENTER)
 
-    time.sleep(3)
-    titles = driver.find_elements_by_css_selector('h3.gs_rt a')
-    writers = driver.find_elements_by_css_selector('div.gs_a')
-    citations = driver.find_elements_by_css_selector('div.gs_fl a:nth-of-type(3)')
-    summaries = driver.find_elements_by_css_selector('div.gs_rs')
-    for title in titles:
-        print(title.text)
-        print('=====================')
-    for summary in summaries:
-        print(summary.text)
-        print('=====================')
-    for citation in citations:
-        print(citation.text)
-    for writer in writers:
-        print(writer.text)
-        scholar.append({"writer": writer.text})
+    time.sleep(5)
     driver.close()
 
 if __name__ == '__main__':
