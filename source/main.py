@@ -3,7 +3,10 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import time
 import pandas as pd
+import re
 
+years = []
+citations = []
 scholar = []
 
 def get_search_keyword():
@@ -16,18 +19,27 @@ def search_in_excel(keyword):
     found_article = articles['Full Journal Title'].where(articles['JCR Abbreviated Title'] == keyword).dropna()
     return found_article
 
+def find_year(information):
+    year = re.search('\d\d\d\d', information)
+    print(year)
+
+def find_citation(information):
+    cited = re.search('(\d)*', information)
+    print(cited)
+
 def search_in_google_scholar(search_keyword):
     driver = webdriver.Chrome(executable_path="./chrome/chromedriver.exe")
     driver.get('https://scholar.google.com')
+    time.sleep(5)
     inputElems = driver.find_elements_by_css_selector('input[name=q]')
     for inputElem in inputElems:
         inputElem.send_keys(search_keyword)
         inputElem.send_keys(Keys.ENTER)
 
-    time.sleep(3)
+    time.sleep(10)
     titles = driver.find_elements_by_css_selector('h3.gs_rt a')
-    writers = driver.find_elements_by_css_selector('div.gs_a')
-    citations = driver.find_elements_by_css_selector('div.gs_fl a:nth-of-type(3)')
+    informations = driver.find_elements_by_css_selector('div.gs_a')
+    cites = driver.find_elements_by_css_selector('div.gs_fl a:nth-of-type(3)')
     summaries = driver.find_elements_by_css_selector('div.gs_rs')
     for title in titles:
         print(title.text)
@@ -35,11 +47,11 @@ def search_in_google_scholar(search_keyword):
     for summary in summaries:
         print(summary.text)
         print('=====================')
-    for citation in citations:
+    for citation in cites:
         print(citation.text)
-    for writer in writers:
-        print(writer.text)
-        scholar.append({"writer": writer.text})
+        find_citation(citation.text)
+    for information in informations:
+        find_year(information.text)
     driver.close()
 
 if __name__ == '__main__':
