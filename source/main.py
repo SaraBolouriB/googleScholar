@@ -5,9 +5,11 @@ import time
 import pandas as pd
 import re
 
-years = []
-citations = []
-scholar = []
+main_years = []
+main_citations = []
+main_titles = []
+main_summaries = []
+scholars = []
 
 def get_search_keyword():
     key = input('Enter Your Keyword: ')
@@ -21,11 +23,11 @@ def search_in_excel(keyword):
 
 def find_year(information):
     year = re.search('\d\d\d\d', information).group(0)
-    print(year)
+    main_years.append(year)
 
 def find_citation(information):
-    cited = re.search('(\d)+', information)
-    print(cited.group(0))
+    cited = re.search('(\d)+', information).group(0)
+    main_citations.append(cited)
 
 def search_in_google_scholar(search_keyword):
     driver = webdriver.Chrome(executable_path="./chrome/chromedriver")
@@ -36,22 +38,17 @@ def search_in_google_scholar(search_keyword):
         inputElem.send_keys(search_keyword)
         inputElem.send_keys(Keys.ENTER)
 
-    time.sleep(10)
+    time.sleep(5)
     titles = driver.find_elements_by_css_selector('h3.gs_rt a')
     informations = driver.find_elements_by_css_selector('div.gs_a')
     cites = driver.find_elements_by_css_selector('div.gs_fl a:nth-of-type(3)')
     summaries = driver.find_elements_by_css_selector('div.gs_rs')
     for title in titles:
-        print(title.text)
-        print('=====================')
+        main_titles.append(title.text)
     for summary in summaries:
-        print(summary.text)
-        print('=====================')
-    print("Cites:")
+        main_summaries.append(summary.text)
     for citation in cites:
-        print(citation.text)
         find_citation(citation.text)
-    print("Years:")
     for information in informations:
         find_year(information.text)
     driver.close()
@@ -61,3 +58,12 @@ if __name__ == '__main__':
     found_article = search_in_excel(keyword)
     print(found_article.iloc[0])
     search_in_google_scholar(found_article.iloc[0])
+    for i in range(10):
+        scholars.append({
+            "title": main_titles[i],
+            "year": main_years[i],
+            "citation": main_citations[i],
+            "summary": main_summaries[i]
+        })
+    for scholar in scholars:
+        print(f"title: {scholar['title']}\nyear: {scholar['year']}\ncitation: {scholar['citation']}\nsummary: {scholar['summary']}\n************************")
