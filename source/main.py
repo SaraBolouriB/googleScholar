@@ -9,6 +9,7 @@ main_years = []
 main_citations = []
 main_titles = []
 main_summaries = []
+main_authors = []
 scholars = []
 
 def get_search_keyword():
@@ -24,6 +25,10 @@ def search_in_excel(keyword):
 def find_year(information):
     year = re.search('\d\d\d\d', information).group(0)
     main_years.append(year)
+
+def find_author(information):
+    author = information.split(' - ')
+    main_authors.append(author[0])
 
 def find_citation(information):
     cited = re.search('(\d)+', information).group(0)
@@ -51,6 +56,7 @@ def search_in_google_scholar(search_keyword):
         find_citation(citation.text)
     for information in informations:
         find_year(information.text)
+        find_author(information.text)
     driver.close()
 
 if __name__ == '__main__':
@@ -61,9 +67,10 @@ if __name__ == '__main__':
     for i in range(10):
         scholars.append({
             "title": main_titles[i],
+            "author": main_authors[i],
             "year": main_years[i],
             "citation": main_citations[i],
             "summary": main_summaries[i]
         })
     for scholar in scholars:
-        print(f"title: {scholar['title']}\nyear: {scholar['year']}\ncitation: {scholar['citation']}\nsummary: {scholar['summary']}\n************************")
+        print(f"title: {scholar['title']}\nauthor: {scholar['author']}\nyear: {scholar['year']}\ncitation: {scholar['citation']}\nsummary: {scholar['summary']}\n************************")
