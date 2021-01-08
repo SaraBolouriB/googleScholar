@@ -20,7 +20,7 @@ def search_in_excel(keyword):
     return found_article
 
 def find_year(information):
-    year = re.search('\d\d\d\d', information)
+    year = re.search('\d\d\d\d', information).group(0)
     print(year)
 
 def find_citation(information):
