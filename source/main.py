@@ -24,11 +24,11 @@ def find_year(information):
     print(year)
 
 def find_citation(information):
-    cited = re.search('(\d)*', information)
-    print(cited)
+    cited = re.search('(\d)+', information)
+    print(cited.group(0))
 
 def search_in_google_scholar(search_keyword):
-    driver = webdriver.Chrome(executable_path="./chrome/chromedriver.exe")
+    driver = webdriver.Chrome(executable_path="./chrome/chromedriver")
     driver.get('https://scholar.google.com')
     time.sleep(5)
     inputElems = driver.find_elements_by_css_selector('input[name=q]')
@@ -47,9 +47,11 @@ def search_in_google_scholar(search_keyword):
     for summary in summaries:
         print(summary.text)
         print('=====================')
+    print("Cites:")
     for citation in cites:
         print(citation.text)
         find_citation(citation.text)
+    print("Years:")
     for information in informations:
         find_year(information.text)
     driver.close()
