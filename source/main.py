@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 import time
 import pandas as pd
 import re
+from te import bibTex
 
 main_years = []
 main_citations = []
@@ -72,5 +73,7 @@ if __name__ == '__main__':
             "citation": main_citations[i],
             "summary": main_summaries[i]
         })
+
+    bibTex(scholars)
     for scholar in scholars:
         print(f"title: {scholar['title']}\nauthor: {scholar['author']}\nyear: {scholar['year']}\ncitation: {scholar['citation']}\nsummary: {scholar['summary']}\n************************")
