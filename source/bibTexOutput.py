@@ -9,8 +9,12 @@ def bibTex(articles):
         bibfile.write(writer.write(db))
 
 def standard_entry(inputs):
+    i = 1
     for input in inputs:
-        input["ID"] = input["year"]
+        input["ID"] = str(i)
         input["ENTRYTYPE"] = 'article'
+        input.pop("journal")
+        input.pop("index in excel")
+        i += 1
     
     return inputs
